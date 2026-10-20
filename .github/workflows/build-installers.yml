@@ -3,6 +3,8 @@ on:
   workflow_dispatch:
   push:
     tags: ['v*']
+permissions:
+  contents: write
 jobs:
   build:
     strategy:
@@ -33,6 +35,14 @@ jobs:
           CSC_IDENTITY_AUTO_DISCOVERY: false
         run: |
           npx electron-builder --${{ matrix.target }} 2>&1 | tee log-pack.txt; test ${PIPESTATUS[0]} -eq 0 || { echo "::error::PACK: $(tail -c 1500 log-pack.txt | tr '\n' ' ')"; exit 1; }
+      - name: Publish logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          mkdir -p /tmp/logs && cp log-*.txt /tmp/logs/ 2>/dev/null
+          git config user.name ci && git config user.email ci@example.com
+          git checkout --orphan buildlogs-${{ matrix.target }} && git rm -rf . >/dev/null 2>&1
+          cp /tmp/logs/* . && git add log-*.txt && git commit -m logs && git push -f origin buildlogs-${{ matrix.target }}
       - uses: actions/upload-artifact@v4
         with:
           name: installer-${{ matrix.os }}
