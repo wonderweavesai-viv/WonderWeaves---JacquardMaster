@@ -10,19 +10,26 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            script: dist:win
+            target: win
           - os: macos-latest
-            script: dist:mac
+            target: mac
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install
-      - run: npm run ${{ matrix.script }}
+      - name: Install
+        shell: bash
+        run: npm install 2>&1 | tee log-install.txt || { echo "::error::INSTALL: $(tail -c 1200 log-install.txt | tr '\n' ' ')"; exit 1; }
+      - name: Web build
+        shell: bash
+        run: npm run build 2>&1 | tee log-build.txt; test ${PIPESTATUS[0]} -eq 0 || { echo "::error::WEBBUILD: $(tail -c 1500 log-build.txt | tr '\n' ' ')"; exit 1; }
+      - name: Package
+        shell: bash
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
+        run: npx electron-builder --${{ matrix.target }} 2>&1 | tee log-pack.txt; test ${PIPESTATUS[0]} -eq 0 || { echo "::error::PACK: $(tail -c 1500 log-pack.txt | tr '\n' ' ')"; exit 1; }
       - uses: actions/upload-artifact@v4
         with:
           name: installer-${{ matrix.os }}
