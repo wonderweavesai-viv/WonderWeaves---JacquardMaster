@@ -1,0 +1,6 @@
+{
+  "name": "WonderWeaves - Jacquard Master",
+  "description": "An interactive web application for designing Jacquard textile weaves and patterns. Users can upload a pixel image with limited colors, apply weaves to each color in the artwork and specify warp and wet patterns to generate lifellike simulations of various types of fabrics",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

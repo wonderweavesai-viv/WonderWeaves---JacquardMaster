@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+/* Scan the app sources for Tailwind classes (no CDN needed) */
+@source "./components";
+@source "./App.tsx";

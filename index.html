@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WonderWeaves - Jacquard Master</title>
+    <meta name="description" content="An interactive web application for designing Jacquard textile weaves and patterns. Users can upload a pixel image with limited colors, apply weaves to each color in the artwork and specify warp and wet patterns to generate lifellike simulations of various types of fabrics" />
+    <meta property="og:title" content="WonderWeaves - Jacquard Master" />
+    <meta property="og:description" content="An interactive web application for designing Jacquard textile weaves and patterns. Users can upload a pixel image with limited colors, apply weaves to each color in the artwork and specify warp and wet patterns to generate lifellike simulations of various types of fabrics" />
+    <style>
+      body {
+        overscroll-behavior: none;
+      }
+      /* Custom scrollbar for webkit */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #94a3b8;
+      }
+      
+      .image-pixelated {
+          image-rendering: pixelated;
+      }
+    </style>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-white text-gray-900">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
