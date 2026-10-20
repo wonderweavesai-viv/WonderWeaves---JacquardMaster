@@ -34,7 +34,7 @@ jobs:
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
         run: |
-          npx electron-builder --${{ matrix.target }} 2>&1 | tee log-pack.txt; test ${PIPESTATUS[0]} -eq 0 || { echo "::error::PACK: $(tail -c 1500 log-pack.txt | tr '\n' ' ')"; exit 1; }
+          npx electron-builder --${{ matrix.target }} --publish never 2>&1 | tee log-pack.txt; test ${PIPESTATUS[0]} -eq 0 || { echo "::error::PACK: $(tail -c 1500 log-pack.txt | tr '\n' ' ')"; exit 1; }
       - name: Publish logs on failure
         if: failure()
         shell: bash
