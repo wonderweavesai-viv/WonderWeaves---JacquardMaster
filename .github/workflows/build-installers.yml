@@ -13,7 +13,7 @@ jobs:
         include:
           - os: windows-latest
             target: win
-          - os: macos-latest
+          - os: macos-14
             target: mac
     runs-on: ${{ matrix.os }}
     steps:
@@ -43,6 +43,13 @@ jobs:
           git config user.name ci && git config user.email ci@example.com
           git checkout --orphan buildlogs-${{ matrix.target }} && git rm -rf . >/dev/null 2>&1
           cp /tmp/logs/* . && git add log-*.txt && git commit -m logs && git push -f origin buildlogs-${{ matrix.target }}
+      - name: Attach to GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view installers >/dev/null 2>&1 || gh release create installers --title "Installers (latest build)" --notes "Windows .exe and macOS .dmg, built by GitHub Actions."
+          gh release upload installers release/*.exe release/*.dmg --clobber
       - uses: actions/upload-artifact@v4
         with:
           name: installer-${{ matrix.os }}
